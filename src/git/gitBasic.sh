@@ -1,165 +1,117 @@
 #!/usr/bin/env zsh
 
-gr() {
-  g$(z39) remote ${@}
+
+git__hsl() {
+  git $@
 }
 
-gd() {
-  g$(z39) diff ${@}
-}
-
-gde() {
-  g$(z39) difftool ${@}
-}
-
-ga() {
-  g$(z39) add ${@}
-}
-
-gco() {
-  g$(z39) checkout ${@}
-}
-  
-gm() {
-  g$(z39) merge ${@}
-}
-  
-gss() {
-  gitListStaged ${@}
-}
-
-gcm() {
-  gitCheckoutToMaster ${@}
-}
-
-gst() {
-  g$(z39) stash ${@}
-}
-
-gstl() {
-  g$(z39) stash list | cat ${@}
-}
-
-gb() {
-  g$(z39) branch ${@}
-}
-
-gba() {
-  g$(z39) branch -a ${@}
-}
-
-
-g$(z39)() {
-  git ${@}
-}
-
-gitIndexDirName$(z39)() {
-  print$(z39) ".git"
+gitIndexDirName__hsl() {
+  print__hsl ".git"
 }
 
 ggpush() {
-  g$(z39) push --set-upstream origin HEAD ${@}
+  git__hsl push --set-upstream origin HEAD ${@}
 }
 
 gitConfigGPGEnableSigningByDefault() {
   git config commit.gpgSign true
 }
 
-gitConfigSet-signingKeyId$(z39)() {
+gitConfigSet-signingKeyId__hsl() {
   local signingKey="$1"
-  g$(z39) config user.signingkey ${signingKey} && \
-    printSuccessOrError-msg$(z39) "Key is set to: " && \
-    g$(z39) config user.signingkey
+  git__hsl config user.signingkey ${signingKey} && \
+    printSuccessOrError-msgit__hsl "Key is set to: " && \
+    git__hsl config user.signingkey
 }
 
 gitUser() {
-  g$(z39) config user.name
-  g$(z39) config user.email
+  git__hsl config user.name
+  git__hsl config user.email
 }
 
 gitCheckoutToUpdated_branch() {
-  g$(z39) checkout "$1" && ggpull
+  git__hsl checkout "$1" && ggpull
 }
 
 gitMergeCurrentBranchOnto-sharedBranch-newMergedBranchName_optional() {
   local sourceBranch="$(gitCurrentBranch)"
   local baseBranch=${1}
-  local newMergedBranch=$(_nameForNewBranchAfterMerge-sourceBranch-baseBranch-customNewName_optional$(z39) \
+  local newMergedBranch=$(_nameForNewBranchAfterMerge-sourceBranch-baseBranch-customNewName_optional__hsl \
     ${sourceBranch} ${baseBranch} ${3})
-  g$(z39) checkout ${baseBranch}
-  g$(z39) pull origin ${baseBranch} || return $(error$(z39))
-  g$(z39) checkout ${sourceBranch}
+  git__hsl checkout ${baseBranch}
+  git__hsl pull origin ${baseBranch} || return $(error__hsl)
+  git__hsl checkout ${sourceBranch}
   gitMergeCurrentBranchOnto-localBranch-newMergedBranchName_optional ${baseBranch} ${newMergedBranch}
 }
 
 gitMerge-sharedBranchOnto-sharedBranch-newMergedBranchName_optional() {
   local sourceBranch=${1}
   local baseBranch=${2}
-  local newMergedBranch=$(_nameForNewBranchAfterMerge-sourceBranch-baseBranch-customNewName_optional$(z39) \
+  local newMergedBranch=$(_nameForNewBranchAfterMerge-sourceBranch-baseBranch-customNewName_optional__hsl \
     ${sourceBranch} ${baseBranch} ${3})
-  g$(z39) checkout ${sourceBranch}  
-  g$(z39) pull origin ${sourceBranch} || return $(error$(z39))
+  git__hsl checkout ${sourceBranch}  
+  git__hsl pull origin ${sourceBranch} || return $(error__hsl)
   gitMergeCurrentBranchOnto-sharedBranch-newMergedBranchName_optional ${baseBranch} ${newMergedBranch}
 }
 
 grc() { grb --continue ${@} }
-grb() { g$(z39) rebase ${@} }
+grb() { git__hsl rebase ${@} }
 
 gitMergeCurrentBranchOnto-localBranch-newMergedBranchName_optional() {
   local sourceBranch="$(gitCurrentBranch)"
   local baseBranch=${1}
-  local newMergedBranch=$(_nameForNewBranchAfterMerge-sourceBranch-baseBranch-customNewName_optional$(z39) \
+  local newMergedBranch=$(_nameForNewBranchAfterMerge-sourceBranch-baseBranch-customNewName_optional__hsl \
     ${sourceBranch} ${baseBranch} ${3})
-  printStarted-scriptName$(z39) "Rebasing ${sourceBranch} onto ${baseBranch} and storing result in ${newMergedBranch}"
-  g$(z39) checkout ${baseBranch}
-  g$(z39) checkout -b ${newMergedBranch}
-  g$(z39) checkout ${sourceBranch}
-  g$(z39) rebase ${newMergedBranch} || gitStatus
+  printStarted-scriptName__hsl "Rebasing ${sourceBranch} onto ${baseBranch} and storing result in ${newMergedBranch}"
+  git__hsl checkout ${baseBranch}
+  git__hsl checkout -b ${newMergedBranch}
+  git__hsl checkout ${sourceBranch}
+  git__hsl rebase ${newMergedBranch} || gitStatus
   gitLogLatestCommits_count 1
-  g$(z39) checkout ${newMergedBranch}
-  g$(z39) merge ${sourceBranch}
+  git__hsl checkout ${newMergedBranch}
+  git__hsl merge ${sourceBranch}
 }
 
 gs() {
   gitStatus ${@}
 }; gitStatus() {
-  g$(z39) status ${@}
+  git__hsl status ${@}
 }
 
-_nameForNewBranchAfterMerge-sourceBranch-baseBranch-customNewName_optional$(z39)() {
+_nameForNewBranchAfterMerge-sourceBranch-baseBranch-customNewName_optional__hsl() {
   local sourceBranch=${1}
   local baseBranch=${2}
   local customNewName_optional=${3}
-  if ! isEmpty-string$(z39) ${customNewName_optional} ;then
-    print$(z39) ${customNewName_optional}
+  if ! isEmpty:string__hsl ${customNewName_optional} ;then
+    print__hsl ${customNewName_optional}
   else
-    # newMergedBranch="${merged}-${sourceBranch}-on-${baseBranch}-$(timestamp$(z39))"
-    print$(z39) "merged-${sourceBranch}-__on__-${baseBranch}"
+    # newMergedBranch="${merged}-${sourceBranch}-on-${baseBranch}-$(timestamp__hsl)"
+    print__hsl "merged-${sourceBranch}-__on__-${baseBranch}"
   fi
 }
 
 gitListStaged() {
-    g$(z39) diff --name-status --cached | cat
+    git__hsl diff --name-status --cached | cat
 }
 
 ggpull() {
-    g$(z39) pull --rebase --no-edit origin $(gitCurrentBranch)
+    git__hsl pull --rebase --no-edit origin $(gitCurrentBranch)
 }
 
 gitSshSetKey_privateKeyFile() {
-    g$(z39) config core.sshCommand "ssh -i $1"
+    git__hsl config core.sshCommand "ssh -i $1"
 }
 
 gitCurrentBranch() {
-  local ref=$(g$(z39) symbolic-ref --quiet HEAD 2> /dev/null)
+  local ref=$(git__hsl symbolic-ref --quiet HEAD 2> /dev/null)
 	local ret=$?
 	if [[ $ret != 0 ]] ;then
 		[[ $ret == 128 ]] && return
-		ref=$(g$(z39) rev-parse --short HEAD 2> /dev/null) || return
+		ref=$(git__hsl rev-parse --short HEAD 2> /dev/null) || return
 	fi
 	echo ${ref#refs/heads/}
 }
 
 gitDiffUncommittedChanges_args() {
-  g$(z39) difftool --no-prompt ${@}
+  git__hsl difftool --no-prompt ${@}
 }

@@ -1,10 +1,31 @@
-###### Fri Jan 24 04:52:59 MSK 2020 created  
+Created on Jan 24 20  
+Updated on Jun 15 26  
 
-# zZshFramework  
-Some utility functions for Zsh (Z-Shell) to make it easier to deal with files, strings, clipboard, java, git, android, iOS, homebrew, curl and other applications commonly used by software engineers.  
+
+# HmnShell Lib  
+A human-readable wrappers and utility functions for Zsh (Z-Shell). Some may work or easily adapted for Bash too. This library helps bigger shell codebases to become reliably maintainable, regardless of what AI may generates nowadays.  
+
+The library is designed to be distributed as source code and be easily modified. OWN your code after making mine YOURS;) 
+
 
 ## User NOTE  
 > These tools were developed, used and tested under MacOS. I'm not sure how well they'll play in other environments. Some of them will not for sure.  
+
+
+## How To Use It
+If you wanna add ALL of the utility functions, add the following to ONE of your shell profile (initializer) scripts, e. g. ~/.zshrc, or ~/.bashrc, or ~/.zprofile:  
+```shell
+# in ~/.zshrc
+source ${REPLACE_WITH_PATH_TO_THIS_DIR}/src/_index__hsl.sh
+```
+
+Alternatively, you can add individual scripts. In this case, make sure you include the `baseUtils.sh`:  
+```shell
+# in ~/.zshrc
+LIB_DIR__HSL="${REPLACE_WITH_PATH_TO_THIS_DIR}/src"
+source ${LIB_DIR__HSL}/baseUtils.sh
+source ${LIB_DIR__HSL}/files.sh # only the file utils are included
+```
 
 
 ## Tested in environment  
@@ -12,85 +33,37 @@ Some utility functions for Zsh (Z-Shell) to make it easier to deal with files, s
 * MacOS 13.0 (you can check yours by running `sw_vers -productVersion`)  
 * zsh 5.8.1 (x86_64-apple-darwin22.0) (check yours with `zsh --version`)  
 
+Check if everything works by running in your terminal:  
+```
+version_hsl
+```
 
-## How to import zZshFramework to Zsh on a Unix-based system:  
-1. locate or create `.zhsrc` file at your user-home dir
-
-2. open .zshrc in any text editor and add to the end:  
-    ``` bash
-    # in ~/.zshrc
-    source "${PATH_TO_THIS_DIR}/mainzZshFramework.sh"
-    ```
-  
-    E. g. 
-    `source "/Users/${your-user-name}/zZshFramework/src/mainzZshFramework.sh"`
-
-3. Reopen your terminal or relaunch Zsh. Alternatively, run:  
-  source ~/.zshrc
-
-4. Recheck zZshFramework imported by running:  
-  version$(z39)
-
-      Expected output should look like:  
-      zZshFramework 8.1.30.20231205
+Expected output example:  
+```
+$: 10.1.32.260615
+HmnShellLib__hsl
+```
 
 
 ## Coding Conventions (Style and Logic)
-
 ### Functions    
-Function name should be written in a camelCase with the `-` before each parameter  
+Function name should be written in a camelCase with an underscore `_` denoting a parameter AND end w/ `__hsl`  
 
 E. g.  
-`printWarning-message` means that the function expects a single parameter with 'message' semantics  
+```shell
+printWarning_message__hsl() { #the function expects a single parameter named [message]
+  local message=$1
+  ...
+}
 
-`print-prefix-message` – the function expects two parameters: the prefix and the message  
-
-#### Function Naming Interpretation
-`...-file-...` – the **full path** to a file is expected as an argument  
-`...-fileName-...` – the **last part** of a file's full path is expected as an argument  
-`...-dir-...` – the **full path** to a directory is expected as an argument  
-`...-dirName-...` – the **last part** of a directory's full path is expected as an argument  
-`is...` – a function that is expected to return non-zero code under certain conditions  
-
-Other details of the applied style are demonstrated below:  
-
-``` bash
-# 1. There is NO space before `()`, and there IS a space before opening brace ` {`
-# 2. Use scoped-name function like `print$(z39)` and others `...$(z39)` functions 
-# in favor of zsh built-ins  
-print-prefix-message$(z39)() {
-## Documentation about this function goes here, starting with [##] and ending with a blank
-# line. Each new line of the doc starts with a single [#], not [##].
-# @arg prefix parameter description goes here
-# @arg message another parameter description  
-# @sideEffects: stdout, fs, createProcess, exitProcess # comma-separated list
-# @error 3 prefix is too long 
-# @error 15 message is too long
-# each error code in the doc starts on a separate line  
-  
-  # 3. In the beginning of the implementation introduce local variables to provide 
-  #    a meaningful local-scope name for each argument matching the parts of the function name
-  # 4. Use `${...}` (a full form) everywhere for variable substitutions
-  # 5. Use 2 spaces as a tab
-  local prefix="${1}" 
-  local subject="${2}"
-  # 6. Use `$(...)` (a full form) everywhere for function call substitutions
-  local procedureResult=$(testProcedure)
-  isEmpty-string$(z39) ${subject} \
-  # 7. When line gets longer, add a line break _before_ logical operators
-      && print$(z39) "${prefix}" \
-      || print$(z39) "${prefix}:\n${subject}\n"
+print_prefix_message__hsl() { #the function expects two parameters: the prefix and the message
+  local prefix=$1
+  local message=$2
+  ...
 }
 ```
 
-[Deprecated] style:  
-* using `_` as a parameter-prefix. E. g. `print_prefix_message`  
-* using `:` as a parameter-prefix. E. g. `print:prefix:message`  
-* direct usage of `__zsf` postfix in function names. E. g. `isEmpty-string__zsf`  
-
----
----
 
 ## Author
-Vlad Zams – Software Engineering Manager and consultant  
-pub@vladzams.com  
+Ali – engineer and manager focused on cybersecurity   
+pub@rssCyber.com  

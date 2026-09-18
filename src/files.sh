@@ -2,7 +2,7 @@
 
 _main_FilesOperations() {  
 
-    fileRemoveWithOverwrite-dirOrFile$(useWithCaution)$(z39)() {
+    fileRemoveWithOverwrite-dirOrFile$(useWithCaution)__hsl() {
       chmod -R u+w ${1} && \
         find ${1} -type f -exec shred --remove=wipe {} + && rm -r ${1}
     }
@@ -35,13 +35,13 @@ _main_FilesOperations() {
         "$srcDir/" "$targetDir/"
     }
 
-    fileLinkRefresh-linkPath-targetFile() {
-      local linkPath="${1}"
-      local targetFile="${2}"
-      filePrepareDirAt-path "$(fileBasePartOf:Path "${linkPath}")"
-      fileMoveToTrash-filePaths "${linkPath}"
-      rm "${linkPath}" > /dev/null 2>&1
-      ln -s "${targetFile}" "${linkPath}"
+    fileLink_link_src() {
+      local link="${1}"
+      local src="${2}"
+      filePrepareDirAt-path "$(fileBasePartOf:Path "${link}")"
+      fileMoveToTrash-filePaths "${link}"
+      rm "${link}" > /dev/null 2>&1
+      ln -s "${src}" "${link}"
     }
 
     md5_ofFiles() {
@@ -68,7 +68,7 @@ _main_FilesOperations() {
 
     md5Short-filePath-outputLength() {
       local outputLength=${2}
-      print$(z39) "$(md5_ofFile "${1}" | colrm $((${outputLength}+1)))"
+      print__hsl "$(md5_ofFile "${1}" | colrm $((${outputLength}+1)))"
     }
     
     md5Short() {
@@ -83,7 +83,7 @@ _main_FilesOperations() {
     copyMD5ToClipboard_files() {
       local md5hash=$(md5_ofFiles $@)
       sysClipboardCopy-args "$md5hash" && \
-      printSuccessOrError-msg$(z39) "$md5hash is copied to clipboard"
+      printSuccessOrError-msgit__hsl "$md5hash is copied to clipboard"
     }
     mdc() {
       copyMD5ToClipboard_files ${@}
@@ -122,25 +122,25 @@ _main_FilesOperations() {
     fileName:Path() {
       local absolutePath=$(fileAbsolutePathOf:File "$1")
       local fileName=$(fileLastPartOf:Path "$absolutePath")
-      print$(z39) "$fileName"
+      print__hsl "$fileName"
     }
 
     fileAbsolutePathOf:File() {
       if isPointsToCurrentDir:Path "$1"; then
-          print$(z39) "$(pwd)"
+          print__hsl "$(pwd)"
       else
-          print$(z39) "$(realpath ${1})"
+          print__hsl "$(realpath ${1})"
       fi
     }
 
     # todo: rename to isRelativePathToCurrentDir
     isPointsToCurrentDir:Path() {
-      is-stringEqualTo-string "$1" "." || isEmpty-string$(z39) "$1" && return 0 || return 1;
+      is-stringEqualTo-string "$1" "." || isEmpty:string__hsl "$1" && return 0 || return 1;
     }
 
     filePrint:Text:ToFile() {
       fileCreateAt_path "$2"
-      print$(z39) "$1" >> "$2"
+      print__hsl "$1" >> "$2"
     }
 
     fileCopyPathOfEnclosingDir:RelativePathToFile() {
@@ -156,7 +156,7 @@ _main_FilesOperations() {
     }
 
     fileCurrentDirPath() {
-      print$(z39) $(pwd)
+      print__hsl $(pwd)
     }
 
     fileEnclosingDirName_Path() {
@@ -184,7 +184,7 @@ _main_FilesOperations() {
       if ! isFileExistAt-path "$1/$fileName" ;then
         fileCreateNewWith:Name "$1/$fileName"
       fi
-      printSuccessOrError-msg$(z39) "$fileName file is ready at path: $1/$fileName"
+      printSuccessOrError-msgit__hsl "$fileName file is ready at path: $1/$fileName"
     }
 
     fileCreateDirs-paths() {
@@ -203,24 +203,24 @@ _main_FilesOperations() {
       local destination="${1}"
       filePrepareDirAt-path "${destination}"
       cp -rv "${@:2}" "${destination}" && \
-        printSuccessOrError-msg$(z39) "Copied to\n${destination}" && \
+        printSuccessOrError-msgit__hsl "Copied to\n${destination}" && \
         lsa "${destination}"
     }
 
     fileCopy-source-destination() {
       cp -r "${1}" "${2}" && \
       local fileName=$(fileLastPartOf:Path "${1}") && \
-      printSuccessOrError-msg$(z39) "Copied ${fileName} -->\n${2}"
+      printSuccessOrError-msgit__hsl "Copied ${fileName} -->\n${2}"
     }
 
     fileMoveChangingNameToUnique-filePath-destinationDir() {
       local timeStamp=$(date)
       local uniqueName="${1}_${timeStamp}"
-      fileMove-sourceFiles-destination$(z39) "$1" "$uniqueName"
-      fileMove-sourceFiles-destination$(z39) "$uniqueName" "$2"
+      fileMove-sourceFiles-destination__hsl "$1" "$uniqueName"
+      fileMove-sourceFiles-destination__hsl "$uniqueName" "$2"
     }
 
-    fileMove-sourceFiles-destination$(z39)() {
+    fileMove-sourceFiles-destination__hsl() {
       mv ${@}
     }
 
@@ -230,7 +230,7 @@ _main_FilesOperations() {
 
     fileCreateNewAt:Path:InitialContent() {
       fileCreateAt_path ${1}
-      print$(z39) "$2" > "$1"
+      print__hsl "$2" > "$1"
     }
 
     fileMoveToTrash-filePaths() {
@@ -249,28 +249,28 @@ _main_FilesOperations() {
 
     fileInsertToBeginning-text-targetFile() {
       local tempFile="$(userTrashDir)/tempFile$(date).temp"
-      print$(z39) ${1} > ${tempFile}
+      print__hsl ${1} > ${tempFile}
       cat ${2} >> ${tempFile}
       fileMoveToTrash-filePaths ${2} \
-        && fileMove-sourceFiles-destination$(z39) ${tempFile} ${2}
+        && fileMove-sourceFiles-destination__hsl ${tempFile} ${2}
     }
 
-    fileCleanContent-dir$(z39)() {
+    fileCleanContent-dir__hsl() {
       local targetDirectory=${1}
       if is-stringEqualTo-string "" ${targetDirectory} \
         || is-stringEqualTo-string "." ${targetDirectory} ;then
         
         local targetDirectory=$(pwd)
-        fileCreateAndGoto-dir$(z39) ..
-        fileCleanContent-dir$(z39) ${targetDirectory}
-        fileCreateAndGoto-dir$(z39) ${targetDirectory}
+        fileCreateAndGoto-dir__hsl ..
+        fileCleanContent-dir__hsl ${targetDirectory}
+        fileCreateAndGoto-dir__hsl ${targetDirectory}
       else
         fileMoveToTrash-filePaths ${targetDirectory}
         filePrepareDirAt-path ${targetDirectory}
       fi
     }
 
-    fileCreateAndGoto-dir$(z39)() {
+    fileCreateAndGoto-dir__hsl() {
       filePrepareDirAt-path ${1}
       cd ${1}
     }
@@ -284,7 +284,7 @@ _main_FilesOperations() {
     }
 
     isFileExistAt-path() {
-      [[ -e $1 ]] && return $(yes$(z39)) || return $(no$(z39))
+      [[ -e $1 ]] && return $(yes__hsl) || return $(no__hsl)
     }
 
     isEmpty-dir() {
@@ -292,11 +292,11 @@ _main_FilesOperations() {
     }
 
     isAbsentOrEmpty-dir() {
-      [[ -z "$(ls -A "${1}" 2>/dev/null)" ]] && return $(yes$(z39)) || return $(no$(z39))
+      [[ -z "$(ls -A "${1}" 2>/dev/null)" ]] && return $(yes__hsl) || return $(no__hsl)
     }
 
     isDir-path() {
-      [[ -d $1 ]] && return $(yes$(z39)) || return $(no$(z39))
+      [[ -d $1 ]] && return $(yes__hsl) || return $(no__hsl)
     }
 }
 _callAndForget_functions _main_FilesOperations

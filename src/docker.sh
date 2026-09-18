@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
 
-dockerContainers$(z39)() {
+dockerContainers__hsl() {
   docker container ls -a
 }

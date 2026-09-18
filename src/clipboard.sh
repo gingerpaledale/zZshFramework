@@ -1,22 +1,22 @@
 #!/usr/bin/env zsh
 
 sysClipboardCopyVerbose-args() {
-  local input=$(argsOrPipeIn-args$(z39) ${@})
-  if isEmpty-string$(z39) ${input} ;then
+  local input=$(argsOrPipeIn-args__hsl ${@})
+  if isEmpty:string__hsl ${input} ;then
     return 0
   else
     sysClipboardCopyRemovingLinebreaks-args "${input}"
-    printSuccessOrError-msg$(z39) "${input}\nis copied to clipboard"
+    printSuccessOrError-msgit__hsl "${input}\nis copied to clipboard"
   fi
 }
 
 sysClipboardCopy-args() {
-    local input=$(argsOrPipeIn-args$(z39) ${@})
+    local input=$(argsOrPipeIn-args__hsl ${@})
     sysClipboardCopy-isRemovingLinebreaks-args false "${input}"
 }
 
 sysClipboardCopyRemovingLinebreaks-args() {
-    local input=$(argsOrPipeIn-args$(z39) ${@})
+    local input=$(argsOrPipeIn-args__hsl ${@})
     sysClipboardCopy-isRemovingLinebreaks-args true "${input}"
 }
 
@@ -28,16 +28,16 @@ sysClipboardCopy-isRemovingLinebreaks-args() {
         pbcopy
       else
         if $isRemovingLinebreaks ;then
-          print$(z39) "$file" | tr -d '\n' | pbcopy
+          print__hsl "$file" | tr -d '\n' | pbcopy
         else
-          print$(z39) "$file" | pbcopy
+          print__hsl "$file" | pbcopy
         fi
       fi
     elif [[ $OSTYPE == cygwin* ]] ;then
       if [[ -z $file ]]; then
-        print$(z39) > /dev/clipboard
+        print__hsl > /dev/clipboard
       else
-        print$(z39) "$file" > /dev/clipboard
+        print__hsl "$file" > /dev/clipboard
       fi
     else
       if (( $+commands[xclip] )) ;then
@@ -50,10 +50,10 @@ sysClipboardCopy-isRemovingLinebreaks-args() {
         if [[ -z $file ]]; then
           xsel --clipboard --input
         else
-          print$(z39) "$file" | xsel --clipboard --input
+          print__hsl "$file" | xsel --clipboard --input
         fi
       else
-        print$(z39) "systemCopyToClipboard: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
+        print__hsl "systemCopyToClipboard: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
         return 1
       fi
     fi

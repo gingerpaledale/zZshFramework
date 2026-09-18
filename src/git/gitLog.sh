@@ -63,7 +63,7 @@ _main_gitLog() {
 
     gitLogHeadline_startingFromCommit() {
         if isEmpty_String__i $1 ;then
-            print-errorMessage$(z39)__i "Missing 1st Argument – the hash of starting-point commit"
+            print_errorMsg__hsl "Missing 1st Argument – the hash of starting-point commit"
             return 1;
         fi
         gitLogHeadline "$1"^1..
@@ -132,7 +132,6 @@ _main_gitLog() {
     }
 
     gitLogLatestCommits_count() {
-        debugLogFunc-args$(z39) "$@"
         local args=${@:2} 
         gitLog_upToCommit_numberOfCommits HEAD "$1" "$args"
     }
@@ -175,7 +174,7 @@ _main_gitLog() {
 
     gitLogShort_startingFromCommit() {
         if isEmpty_String__i $1 ;then
-            print-errorMessage$(z39)__i "Missing 1st Argument – the hash of starting-point commit"
+            print_errorMsg__hsl "Missing 1st Argument – the hash of starting-point commit"
             return 1;
         fi
         gitLogShort "$1"^1..
@@ -204,7 +203,7 @@ _main_gitLog() {
 
 
     gitLog_format_args() {
-        # debugLogFunc-args$(z39) "$@"
+        # debugLogFunc-args__hsl "$@"
         # %h = abbreviated commit hash
         # %x09 = tab (character for code 9)
         # %an = author name
@@ -217,7 +216,7 @@ _main_gitLog() {
     }
 
     _gitLogExtract_logRetrieverFunc_upToCommit_numberOfCommits_prefix_postfix() {
-        # debugLogFunc-args$(z39) "$@"
+        # debugLogFunc-args__hsl "$@"
         local args=${@:6}  
         local gitLogExtract=$($1 -"$3" "$args" "$2")
         if isEmpty_String__i "$3" ;then
@@ -244,10 +243,9 @@ _main_gitLog() {
 
     #import
     copyToClipboard_args__i() { sysClipboardCopy-args $@; }
-    print-errorMessage$(z39)__i() { print-errorMessage$(z39) $@; }
-    isEmpty_String__i() { isEmpty-string$(z39) $@; }
-    printSuccessAdding_text__i() { printSuccessOrError-msg$(z39) $@; }
-    print__i() { print$(z39) $@; }
+    isEmpty_String__i() { isEmpty:string__hsl $@; }
+    printSuccessAdding_text__i() { printSuccessOrError-msgit__hsl $@; }
+    print__i() { print__hsl $@; }
     trimEndSpaces__i() { trimEndSpaces $@; }
 }
 _callAndForget_functions _main_gitLog  

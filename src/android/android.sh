@@ -3,7 +3,7 @@
 _main_android() {
     
     androidSDKDir() {
-        print$(z39) "$(userLibraryDir)/Android/sdk"
+        print__hsl "$(userLibraryDir)/Android/sdk"
     }
 
     androidSDKSetupEnv() {
@@ -14,13 +14,13 @@ _main_android() {
 
     androidBuildRelease_buildNumber_moduleName_apkTargetDir_buildLogFilePath() {
       local buildFlavourOptional=${5}
-      androidBuild-buildNumber-moduleName-apkTargetDir-buildLogFilePath-buildFlavour-releaseOrDebug$(z39) \
+      androidBuild-buildNumber-moduleName-apkTargetDir-buildLogFilePath-buildFlavour-releaseOrDebugit__hsl \
         ${1} ${2} ${3} ${4} "${buildFlavourOptional}" "release"
     }
 
     androidBuildDebug_buildNumber_moduleName_apkTargetDir_buildLogFilePath() {
       local buildFlavourOptional=${5}
-      androidBuild-buildNumber-moduleName-apkTargetDir-buildLogFilePath-buildFlavour-releaseOrDebug$(z39) \
+      androidBuild-buildNumber-moduleName-apkTargetDir-buildLogFilePath-buildFlavour-releaseOrDebugit__hsl \
         ${1} ${2} ${3} ${4} "${buildFlavourOptional}" "debug"
     }
 
@@ -31,7 +31,7 @@ _main_android() {
       local buildLogFilePath=${4}
       local buildFlavourOptional=${5}
       androidRemoveArtifacts-moduleName ${moduleName}
-      local buildDir="$(androidModuleOutputsDir-moduleName$(z39) ${moduleName})/bundle/release"
+      local buildDir="$(androidModuleOutputsDir-moduleName__hsl ${moduleName})/bundle/release"
       runGradle:PathToBuildLogFile:GradleTaskToRun ${buildLogFilePath} bundleRelease && \
       filePrepareDirAt-path ${targetDir} && \
       copyFiles:FromDir:NameMatchingPattern:ToDir \
@@ -40,11 +40,11 @@ _main_android() {
               "${targetDir}"
     }
 
-    androidModuleOutputsDir-moduleName$(z39)() {
-      print$(z39) "${1}/build/outputs"
+    androidModuleOutputsDir-moduleName__hsl() {
+      print__hsl "${1}/build/outputs"
     }
 
-    androidBuild-buildNumber-moduleName-apkTargetDir-buildLogFilePath-buildFlavour-releaseOrDebug$(z39)() {
+    androidBuild-buildNumber-moduleName-apkTargetDir-buildLogFilePath-buildFlavour-releaseOrDebugit__hsl() {
       debugFuncInit-args "$@"
       local buildNumber=${1}
       local moduleName=${2}
@@ -59,7 +59,7 @@ _main_android() {
       else
         runGradle:PathToBuildLogFile:GradleTaskToRun ${buildLogFilePath} :${moduleName}:assembleDebug && \
       fi && \
-      androidCopyApksFrom-appModule-buildNumber-targetDir-buildFlavour-releaseOrDebug$(z39) \
+      androidCopyApksFrom-appModule-buildNumber-targetDir-buildFlavour-releaseOrDebugit__hsl \
         "./${moduleName}" ${buildNumber} ${apkTargetDir} ${buildFlavour} ${releaseOrDebug}
     }
 
@@ -68,41 +68,40 @@ _main_android() {
       local buildFlavour=${2}
       local apkOrBundle=${3}
       local releaseOrDebug=${4}
-      fileMoveToTrash-filePaths "$(androidModuleOutputsDir-moduleName$(z39) ${moduleName})"
+      fileMoveToTrash-filePaths "$(androidModuleOutputsDir-moduleName__hsl ${moduleName})"
     }
 
-    androidCopyApksFrom-appModule-buildNumber-targetDir-buildFlavour-releaseOrDebug$(z39)() {
-      debugLogFunc-args$(z39) "$@"
+    androidCopyApksFrom-appModule-buildNumber-targetDir-buildFlavour-releaseOrDebugit__hsl() {
       local appModule=${1}
       local targetDir="$3/$2"
       local buildFlavour=${4}
       local releaseOrDebug=${5}
-      local apkSourceDir="$(apkSourceDir-appModule-buildFlavour-releaseOrDebug$(z39) ${appModule} ${buildFlavour} ${releaseOrDebug})"
+      local apkSourceDir="$(apkSourceDir-appModule-buildFlavour-releaseOrDebugit__hsl ${appModule} ${buildFlavour} ${releaseOrDebug})"
       filePrepareDirAt-path "${targetDir}"
       copyFiles:FromDir:NameMatchingPattern:ToDir \
               "${apkSourceDir}/" \
               "*.apk" \
               "${targetDir}" && \
       if is-stringEqualTo-string ${releaseOrDebug} "release" ;then
-        cp "$(androidArtifactsDir-appModule$(z39) ${appModule})/mapping/${releaseOrDebug}/mapping.txt" "$targetDir"
+        cp "$(androidArtifactsDir-appModule__hsl ${appModule})/mapping/${releaseOrDebug}/mapping.txt" "$targetDir"
       fi
     }
 
-    apkSourceDir-appModule-buildFlavour-releaseOrDebug$(z39)() {
+    apkSourceDir-appModule-buildFlavour-releaseOrDebugit__hsl() {
       local appModule=${1}
       local buildFlavour=${2}
       local releaseOrDebug=${3}
-      local basePath="$(androidArtifactsDir-appModule$(z39) ${appModule})/apk"
-      if isEmpty-string$(z39) ${buildFlavour} ;then
-        print$(z39) "${basePath}/${releaseOrDebug}/"
+      local basePath="$(androidArtifactsDir-appModule__hsl ${appModule})/apk"
+      if isEmpty:string__hsl ${buildFlavour} ;then
+        print__hsl "${basePath}/${releaseOrDebug}/"
       else
-        print$(z39) "${basePath}/${buildFlavour}/${releaseOrDebug}/"
+        print__hsl "${basePath}/${buildFlavour}/${releaseOrDebug}/"
       fi
     }
 
-    androidArtifactsDir-appModule$(z39)() {
+    androidArtifactsDir-appModule__hsl() {
       local appModule=${1}
-      print$(z39) "${appModule}/build/outputs"
+      print__hsl "${appModule}/build/outputs"
     }
 
     androidStudioOpen:ProjectDir_optional() {
@@ -126,7 +125,7 @@ _main_android() {
     }
 
     androidStudioSettingsBackupDir() {
-        print$(z39) "$(ztoolsDir)/IDESettings/AndroidStudio"
+        print__hsl "$(utilsAndConfigsDir)/IDESettings/AndroidStudio"
     }
 
     androidStudioDocumentationSettingsEdit() {
@@ -134,11 +133,11 @@ _main_android() {
     }
 
     androidStudioDocumentationSettingsFile() {
-        print$(z39) "$(androidStudioSettingsDir)/options/jdk.table.xml"
+        print__hsl "$(androidStudioSettingsDir)/options/jdk.table.xml"
     }
 
     androidStudioSettingsDir() {
-        print$(z39) "$(userLibraryDir)/Preferences/AndroidStudio4.0"
+        print__hsl "$(userLibraryDir)/Preferences/AndroidStudio4.0"
     }
 
     androidToolsDirGoto() {
@@ -146,20 +145,20 @@ _main_android() {
     }
 
     androidInstallCommandLineTools() {
-        install-apps android-commandlinetools
+        install:appC android-commandlinetools
         addToPath-args $(androidSDKDir) $(androidToolsDir) $(androidToolsExtraDir)
     }
 
     androidToolsDir() {
-        print$(z39) "$(androidSDKDir)/tools"
+        print__hsl "$(androidSDKDir)/tools"
     }
 
     androidToolsExtraDir() {
-        print$(z39) "$(androidToolsDir)/bin"
+        print__hsl "$(androidToolsDir)/bin"
     }
 
     androidSDKManagerPath() {
-        print$(z39) "$(androidToolsExtraDir)/sdkmanager"
+        print__hsl "$(androidToolsExtraDir)/sdkmanager"
     }
 
     android() {
@@ -180,7 +179,7 @@ _main_android() {
     }
 
     androidPlatformToolsDir() {
-        print$(z39) "$(androidSDKDir)/platform-tools"
+        print__hsl "$(androidSDKDir)/platform-tools"
     }
     adb() {
       $(androidPlatformToolsDir)/adb ${@}
@@ -190,7 +189,7 @@ _main_android() {
     adbScreenshot_filePath() {
         local targetPath="$1.png"
         adb exec-out screencap -p > "$targetPath"
-        print$(z39) "$targetPath"
+        print__hsl "$targetPath"
     }
 
     adbScreenrecord_outputDir_FileName() {
@@ -294,7 +293,7 @@ _main_android() {
     }
 
     androidKeySha1Debug() {
-      print$(z39) "Looking for DEBUG key. Use 'android' as a password"
+      print__hsl "Looking for DEBUG key. Use 'android' as a password"
       keytool -list -v -alias androiddebugkey -keystore ~/.android/debug.keystore
     }
 
@@ -306,8 +305,8 @@ _main_android() {
         do_facebookAndroidKeyHashcode:KeyAlias:KeystoreFilePath() {
             keytool -exportcert -alias "$1" -keystore "$2" | openssl sha1 -binary | openssl base64
         }
-        if isEmpty-string$(z39) $1 || isEmpty-string$(z39) $2; then
-            print$(z39) "Looking for DEBUG key. Use 'android' as a password"
+        if isEmpty:string__hsl $1 || isEmpty:string__hsl $2; then
+            print__hsl "Looking for DEBUG key. Use 'android' as a password"
             do_facebookAndroidKeyHashcode:KeyAlias:KeystoreFilePath androiddebugkey "$(userHomeDir)/.android/debug.keystore"
         else
             do_facebookAndroidKeyHashcode:KeyAlias:KeystoreFilePath ${1} ${2}
@@ -337,7 +336,7 @@ _main_android() {
             "29"      "10"        "Android Q"          "Sep 3, 2019"                   ""                                  
             "30"      "11"        "-"          ""                   ""                                  
         )
-        print$(z39) -arC5 -- "$values[@]"
+        print__hsl -arC5 -- "$values[@]"
     }
 
     androidScreenSizesBuckets() {
@@ -351,7 +350,7 @@ _main_android() {
             "xxxhdpi"     "~640dpi"
             "  nodpi"       "no resources scale applied"
         )
-        print$(z39) -arC2 -- "$values[@]"
+        print__hsl -arC2 -- "$values[@]"
     }
 
     adbLogsFetchFromDevicesTo:File() {
@@ -380,7 +379,7 @@ _main_android() {
         for specifier in ${@} ;do
             targetDir="$targetDir-$specifier"
         done
-        print$(z39) "$targetDir"
+        print__hsl "$targetDir"
     }
 
     androidScreenIndicatorStrResource_specifiersArray() {
@@ -393,20 +392,20 @@ _main_android() {
         for specifier in ${@} ;do
             template="$template$specifier, "
         done
-        print$(z39) "$template$templatePostfix"
+        print__hsl "$template$templatePostfix"
     }
 
     # reimplement in TS accepting array of sets 
     androidGenerateScreenIndicatorXml_specifiersToCombineArray() {
         if ! isEnclosingDirNameEqualsTo_name "res"  ;then
-            print$(z39) "Error: running NOT within res directory"
+            print__hsl "Error: running NOT within res directory"
             return 1
         fi
         local destFile="$(androidScreenSpecifierDir_specifiersArray $@)/screen_size_indicator.xml"
         fileMoveToTrash-filePaths "$destFile"
         local content="$(androidScreenIndicatorStrResource_specifiersArray $@)"
         filePrint:Text:ToFile "$content" "$destFile"
-        printSuccessOrError-msg$(z39) "$destFile\ncreated"
+        printSuccessOrError-msgit__hsl "$destFile\ncreated"
     }
 
     androidSDKSetupEnv
